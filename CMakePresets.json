@@ -1,0 +1,78 @@
+{
+    "version": 8,
+    "configurePresets": [
+        {
+            "name": "debug",
+            "description": "Debug settings for QSpring.",
+            "hidden": true,
+            "binaryDir": "${workspaceFolder}/build-debug",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug",
+                "CMAKE_EXPORT_COMPILE_COMMANDS": "YES",
+                "BUILD_SHARED_LIBS": "YES",
+                "BUILD_EXAMPLES": "YES"
+            }
+        },
+        {
+            "name": "vcpkgWin",
+            "inherits": "debug",
+            "displayName": "Windows: vcpkg",
+            "generator": "Ninja"            
+        },
+        {
+            "name": "vcpkgLinux",
+            "inherits": "debug",
+            "displayName": "Linux: vcpkg",
+            "generator": "Ninja"
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "releaseWin",
+            "description": "",
+            "displayName": "Debug Windows",
+            "configurePreset": "vcpkgWin",
+            "configuration": "Debug"
+        },
+        {
+            "name": "releaseLinux",
+            "description": "",
+            "displayName": "Debug Linux",
+            "configurePreset": "vcpkgLinux",
+            "configuration": "Debug"
+        }
+    ],
+    "packagePresets": [
+        {
+            "name": "Linux: TGZ",
+            "packageName": "QSpring",
+            "configurePreset": "vcpkgLinux",
+            "packageVersion": "1.0.0",
+            "generators": [
+                "TGZ"
+            ],
+            "output": {
+                "debug": true
+            }
+        },
+        {
+            "name": "Windows: ZIP",
+            "packageName": "QSpring",
+            "configurePreset": "vcpkgWin",
+            "packageVersion": "1.0.0",
+            "generators": [
+                "ZIP"
+            ],
+            "output": {
+                "debug": true
+            },
+            "variables": {
+                "CPACK_PACKAGE_DESCRIPTION": "Hello",
+                "CPACK_SET_DESTDIR": ".",
+                "CPACK_PACKAGE_FILE_NAME": "QSpring",
+                "CPACK_CMAKE_GENERATOR": "Ninja",
+                "CPACK_INSTALL_CMAKE_PROJECTS": ".;QSpring;QSpring;/"
+            }
+        }
+    ]
+}
