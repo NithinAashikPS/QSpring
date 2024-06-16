@@ -1,0 +1,14 @@
+@PACKAGE_INIT@
+
+include("${CMAKE_CURRENT_LIST_DIR}/QSpringConfigVersion.cmake")
+
+# Handle components
+include(CMakeFindDependencyMacro)
+
+if(NOT TARGET QSpring::Gui AND "Gui" IN_LIST QSpring_FIND_COMPONENTS)
+  include("${CMAKE_CURRENT_LIST_DIR}/QSGuiConfig.cmake")
+endif()
+
+if(NOT TARGET QSpring::Controls AND "Controls" IN_LIST QSpring_FIND_COMPONENTS)
+  include("${CMAKE_CURRENT_LIST_DIR}/QSControlsConfig.cmake")
+endif()

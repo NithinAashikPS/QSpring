@@ -9,8 +9,7 @@
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Debug",
                 "CMAKE_EXPORT_COMPILE_COMMANDS": "YES",
-                "BUILD_SHARED_LIBS": "YES",
-                "BUILD_EXAMPLES": "YES"
+                "BUILD_SHARED_LIBS": "YES"
             }
         },
         {

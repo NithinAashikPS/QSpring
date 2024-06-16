@@ -9,32 +9,52 @@ set(CMAKE_C_STANDARD_REQUIRED True)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 set(CMAKE_INSTALL_PREFIX ${CMAKE_BINARY_DIR}/install)
+set(CMAKE_PREFIX_PATH C:\\Qt\\5.15.2\\mingw81_64)
 
-option(BUILD_EXAMPLES "Build QSpring Examples" OFF)
+find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core Quick)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Quick)
+
 option(BUILD_SHARED_LIBS "Build shared libraries" OFF)
 
-if(BUILD_EXAMPLES)
-    add_subdirectory(example)
-endif()
-
-set(
-    QSPRING_PUBLIC_HEADERS
-    ${CMAKE_SOURCE_DIR}/include/QSpring.hpp
-)
-
-set(
-    PROJECT_SOURCES
-    ${CMAKE_SOURCE_DIR}/src/QSpring.cpp
-)
+include(GNUInstallDirs)
+add_subdirectory(src)
 
 if(BUILD_SHARED_LIBS)
-    add_library(QSpring SHARED ${PROJECT_SOURCES})
+    add_library(
+        QSpring SHARED 
+        $<TARGET_OBJECTS:QSGui>
+        $<TARGET_OBJECTS:QSControls>
+    )
 else()
-    add_library(QSpring STATIC ${PROJECT_SOURCES})
+    add_library(
+        QSpring STATIC 
+        $<TARGET_OBJECTS:QSGui>
+        $<TARGET_OBJECTS:QSControls>
+    )
 endif()
 
-target_include_directories(QSpring PUBLIC ${CMAKE_SOURCE_DIR}/include)
+target_link_libraries(
+    QSpring PRIVATE
+    Qt${QT_VERSION_MAJOR}::Core
+    Qt${QT_VERSION_MAJOR}::Quick
+)
 
-
-install(FILES ${QSPRING_PUBLIC_HEADERS} DESTINATION include)
-install(TARGETS QSpring LIBRARY DESTINATION lib)
+include(CMakePackageConfigHelpers)
+write_basic_package_version_file(
+    ${CMAKE_CURRENT_BINARY_DIR}/QSpringConfigVersion.cmake
+    VERSION ${PROJECT_VERSION}
+    COMPATIBILITY AnyNewerVersion
+)
+install(FILES
+    ${CMAKE_CURRENT_BINARY_DIR}/QSpringConfigVersion.cmake
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake
+)
+configure_package_config_file(
+    ${CMAKE_CURRENT_SOURCE_DIR}/cmake/QSpringConfig.cmake.in
+    ${CMAKE_CURRENT_BINARY_DIR}/QSpringConfig.cmake
+    INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake
+)
+install(FILES
+    ${CMAKE_CURRENT_BINARY_DIR}/QSpringConfig.cmake
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake
+)
